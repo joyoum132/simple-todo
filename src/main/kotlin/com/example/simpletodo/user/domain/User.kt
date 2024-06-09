@@ -20,4 +20,7 @@ class User (
 
     @Column(nullable = false)
     var isDeleted: Boolean = false
+
+    @Column(nullable = false)
+    var isLogin: Boolean = false
 }
