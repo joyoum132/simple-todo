@@ -5,9 +5,8 @@ import jakarta.persistence.*
 
 @Entity
 class TaskHistory(
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "task_id", nullable = false)
-    val task: Task,
+    @Column(nullable = false)
+    val taskId: Long,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -15,12 +14,13 @@ class TaskHistory(
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    val newStatus: Task.TaskStatus
-
-): BaseTime() {
-    @Id
-    var id: Long = 0L
+    val newStatus: Task.TaskStatus,
 
     @Column(nullable = true)
     var memo: String? = null
+
+): BaseTime() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = 0L
 }

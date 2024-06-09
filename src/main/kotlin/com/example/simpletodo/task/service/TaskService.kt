@@ -2,20 +2,25 @@ package com.example.simpletodo.task.service
 
 import com.example.simpletodo.settings.exception.BadRequestException
 import com.example.simpletodo.task.controller.dto.AddTaskReq
+import com.example.simpletodo.task.controller.dto.ChangeStatusReq
 import com.example.simpletodo.task.controller.dto.TaskDetail
 import com.example.simpletodo.task.controller.dto.TaskInfo
 import com.example.simpletodo.task.domain.Task
 import com.example.simpletodo.task.repository.TaskHistoryRepository
 import com.example.simpletodo.task.repository.TaskRepository
+import com.example.simpletodo.task.state.StateFactory
 import com.example.simpletodo.user.repository.UserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
 class TaskService(
     private val taskRepository: TaskRepository,
     private val userRepository: UserRepository,
-    private val taskHistoryRepository: TaskHistoryRepository
+    private val taskHistoryRepository: TaskHistoryRepository,
+    private val stateFactory: StateFactory,
 ) {
 
     fun makeTask(req: AddTaskReq): Task {
@@ -68,7 +73,7 @@ class TaskService(
                                 created = task.created,
                                 updated = task.updated,
                             ),
-                            stateHistory = taskHistoryRepository.findByTaskOrderByCreatedAsc(task)
+                            stateHistory = taskHistoryRepository.findByTaskIdOrderByCreatedAsc(task.id)
                                 .map {
                                     TaskDetail.History(
                                         id = it.id,
@@ -85,4 +90,16 @@ class TaskService(
             }
             ?: throw BadRequestException("회원을 찾을 수 없습니다.")
     }
+
+    @Transactional
+    fun updateTaskStatus(taskId: Long, req: ChangeStatusReq): Task {
+        return taskRepository.findByIdOrNull(taskId)
+            ?.apply {
+                val state = stateFactory.create(this)
+                state.changeState(this, req.to, req.memo)
+            }
+            ?: throw BadRequestException("할일을 찾을 수 없습니다.")
+
+    }
+
 }

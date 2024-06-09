@@ -2,17 +2,13 @@ package com.example.simpletodo.task.controller
 
 import com.example.simpletodo.settings.commonVal.ApiResponse
 import com.example.simpletodo.task.controller.dto.AddTaskReq
+import com.example.simpletodo.task.controller.dto.ChangeStatusReq
 import com.example.simpletodo.task.controller.dto.TaskDetail
 import com.example.simpletodo.task.controller.dto.TaskInfo
 import com.example.simpletodo.task.domain.Task
 import com.example.simpletodo.task.service.TaskService
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RestController
@@ -45,4 +41,11 @@ class TaskController(
         )
     }
 
+    @PutMapping("/{taskId}")
+    fun changeTaskStatus(@PathVariable taskId: Long, @RequestBody changeStatusReq: ChangeStatusReq) {
+        ApiResponse(
+            true,
+            taskService.updateTaskStatus(taskId, changeStatusReq)
+        )
+    }
 }
