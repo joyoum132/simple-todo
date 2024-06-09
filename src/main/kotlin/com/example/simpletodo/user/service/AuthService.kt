@@ -25,12 +25,13 @@ class AuthService(
         return userRepository.save(
             User(
                 signUpReq.loginId,
-                signUpReq.nickname,
                 passwordEncoder.encode(signUpReq.password),
+                signUpReq.nickname,
             )
         )
     }
 
+    @Transactional
     fun deleteUser(loginId: String): User {
         return userRepository.findUserByLoginIdAndIsDeletedFalse(loginId)
             ?.apply { isDeleted = true }
