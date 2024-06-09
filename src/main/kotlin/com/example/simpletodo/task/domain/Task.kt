@@ -3,6 +3,8 @@ package com.example.simpletodo.task.domain
 import com.example.simpletodo.settings.commonVal.BaseTime
 import com.example.simpletodo.user.domain.User
 import jakarta.persistence.*
+import org.springframework.format.annotation.DateTimeFormat
+import java.time.LocalDate
 
 @Entity
 class Task(
@@ -16,6 +18,10 @@ class Task(
     @Enumerated(EnumType.STRING)
     var status: TaskStatus,
 
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    var dueDate: LocalDate?,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     val user: User
@@ -23,6 +29,9 @@ class Task(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
+
+    @Column(nullable = false)
+    val isDeleted: Boolean = false
 
     enum class TaskStatus {
         TODO, PENDING, IN_PROGRESS, DONE
