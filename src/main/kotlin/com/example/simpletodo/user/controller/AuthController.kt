@@ -3,7 +3,6 @@ package com.example.simpletodo.user.controller
 import com.example.simpletodo.settings.commonVal.ApiResponse
 import com.example.simpletodo.user.controller.dto.SignInReq
 import com.example.simpletodo.user.controller.dto.SignUpReq
-import com.example.simpletodo.user.domain.User
 import com.example.simpletodo.user.service.AuthService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
@@ -15,10 +14,11 @@ class AuthController(
 ) {
 
     @PostMapping("/sign-up", name = "회원 가입")
-    fun signUp(@RequestBody @Valid signUpReq: SignUpReq): ApiResponse<User> {
+    fun signUp(@RequestBody @Valid signUpReq: SignUpReq): ApiResponse<Long> {
+        val newUser = authService.signUp(signUpReq)
         return ApiResponse(
             true,
-            authService.signUp(signUpReq)
+            newUser.id
         )
     }
 
@@ -33,5 +33,4 @@ class AuthController(
         authService.deleteUser(loginId)
         return ApiResponse(true, null)
     }
-
 }

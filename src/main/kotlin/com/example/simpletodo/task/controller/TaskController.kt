@@ -18,10 +18,11 @@ class TaskController(
 ) {
 
     @PostMapping(name = "할 일 등록")
-    fun addTask(@RequestBody @Valid addTaskReq: AddTaskReq): ApiResponse<Task> {
+    fun addTask(@RequestBody @Valid addTaskReq: AddTaskReq): ApiResponse<Long> {
+        val newTask = taskService.makeTask(addTaskReq)
         return ApiResponse(
             true,
-            taskService.makeTask(addTaskReq)
+            newTask.id
         )
     }
 
@@ -43,9 +44,10 @@ class TaskController(
 
     @PutMapping("/{taskId}")
     fun changeTaskStatus(@PathVariable taskId: Long, @RequestBody changeStatusReq: ChangeStatusReq) {
+        taskService.updateTaskStatus(taskId, changeStatusReq)
         ApiResponse(
             true,
-            taskService.updateTaskStatus(taskId, changeStatusReq)
+            null
         )
     }
 }
