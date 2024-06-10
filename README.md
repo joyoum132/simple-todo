@@ -73,7 +73,7 @@
 
 
 #### 4. 할 일 상태 변경
-> [PUT] /task/{loginId}/due-date/{start}/{end}
+> [PUT] /task/{loginId}/{taskId}
 
 ![img_1.png](img_1.png)
 - 제약 조건 
