@@ -2,14 +2,18 @@ spring:
   application:
     name: simple-todo
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/demo?autoReconnect=true
-    username: root
-    password: whduddlek123!
+    url: jdbc:h2:mem:testdb;MODE=mysql;NON_KEYWORDS=USER;
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
   jpa:
     show-sql: true
     properties:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
