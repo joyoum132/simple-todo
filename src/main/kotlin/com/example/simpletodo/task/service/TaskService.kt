@@ -23,7 +23,7 @@ class TaskService(
 ) {
 
     fun makeTask(req: AddTaskReq): Task {
-        return userRepository.findUserByLoginIdAndIsDeletedFalse(req.loginId)
+        return userRepository.findUserByLoginIdAndIsDeletedFalseAndIsLoginTrue(req.loginId)
             ?.run {
                 taskRepository.save(
                     Task(req.title, req.content, req.status, req.dueDate, this)
@@ -37,9 +37,9 @@ class TaskService(
         startDate: LocalDate,
         endDate: LocalDate
     ): Map<Task.TaskStatus, List<TaskInfo>> {
-        userRepository.findUserByLoginIdAndIsDeletedFalse(loginId)
+        userRepository.findUserByLoginIdAndIsDeletedFalseAndIsLoginTrue(loginId)
             ?.let { user ->
-                return taskRepository.findByUserAndDueDateBetweenOrderByCreated(user, startDate, endDate.plusDays(1))
+                return taskRepository.getTaskByUserAndDueDateBetweenOrNull(user, startDate, endDate)
                     .groupBy(
                         { it.status },
                         {
@@ -59,7 +59,7 @@ class TaskService(
     }
 
     fun getLastAddedTask(loginId: String): TaskDetail {
-        return userRepository.findUserByLoginIdAndIsDeletedFalse(loginId)
+        return userRepository.findUserByLoginIdAndIsDeletedFalseAndIsLoginTrue(loginId)
             ?.let { user ->
                 taskRepository.findFirstByUserAndIsDeletedFalseOrderByCreatedDesc(user)
                     ?.let { task ->
@@ -92,13 +92,17 @@ class TaskService(
     }
 
     @Transactional
-    fun updateTaskStatus(taskId: Long, req: ChangeStatusReq): Task {
-        return taskRepository.findByIdAndIsDeletedFalse(taskId)
-            ?.apply {
-                val state = stateFactory.create(this)
-                state.changeState(this, req.to, req.memo)
+    fun updateTaskStatus(loginId: String, taskId: Long, req: ChangeStatusReq): Task {
+        return userRepository.findUserByLoginIdAndIsDeletedFalseAndIsLoginTrue(loginId)
+            ?.let {
+                taskRepository.findByIdAndIsDeletedFalse(taskId)
+                    ?.apply {
+                        val state = stateFactory.create(this)
+                        state.changeState(this, req.to, req.memo)
+                    }
+                    ?: throw BadRequestException("할일을 찾을 수 없습니다.")
             }
-            ?: throw BadRequestException("할일을 찾을 수 없습니다.")
+            ?: throw BadRequestException("회원을 찾을 수 없습니다.")
     }
 
 }

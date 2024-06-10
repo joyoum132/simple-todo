@@ -8,6 +8,7 @@ import com.example.simpletodo.task.controller.dto.TaskInfo
 import com.example.simpletodo.task.domain.Task
 import com.example.simpletodo.task.service.TaskService
 import jakarta.validation.Valid
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
@@ -46,9 +47,9 @@ class TaskController(
         )
     }
 
-    @PutMapping("/{taskId}")
-    fun changeTaskStatus(@PathVariable taskId: Long, @RequestBody changeStatusReq: ChangeStatusReq) {
-        taskService.updateTaskStatus(taskId, changeStatusReq)
+    @PutMapping("/{loginId}/{taskId}", name = "todo 상태 변경")
+    fun changeTaskStatus(@PathVariable loginId: String, @PathVariable taskId: Long, @RequestBody @Valid changeStatusReq: ChangeStatusReq) {
+        taskService.updateTaskStatus(loginId, taskId, changeStatusReq)
         ApiResponse(
             true,
             null

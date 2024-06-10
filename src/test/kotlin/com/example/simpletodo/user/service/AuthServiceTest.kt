@@ -65,7 +65,7 @@ class AuthServiceTest {
 
     @Test
     fun 회원탈퇴_성공() {
-        `when`(userRepository.findUserByLoginIdAndIsDeletedFalse(loginId)).thenReturn(savedUser)
+        `when`(userRepository.findUserByLoginIdAndIsDeletedFalseAndIsLoginTrue(loginId)).thenReturn(savedUser)
 
         val deletedUser = authService.deleteUser(loginId)
         assertTrue(deletedUser.isDeleted)
@@ -74,7 +74,7 @@ class AuthServiceTest {
 
     @Test
     fun 회원탈퇴_실패_회원조회안됨() {
-        `when`(userRepository.findUserByLoginIdAndIsDeletedFalse(loginId)).thenReturn(null)
+        `when`(userRepository.findUserByLoginIdAndIsDeletedFalseAndIsLoginTrue(loginId)).thenReturn(null)
 
         assertThrows(BadRequestException::class.java) {
             authService.deleteUser(loginId)
@@ -84,7 +84,7 @@ class AuthServiceTest {
 
     @Test
     fun 로그인_성공() {
-        `when`(userRepository.findUserByLoginIdAndIsDeletedFalse(loginId)).thenReturn(savedUser)
+        `when`(userRepository.findUserByLoginIdAndIsDeletedFalseAndIsLoginTrue(loginId)).thenReturn(savedUser)
         `when`(passwordEncoder.matches(inputPwd, encryptPwd)).thenReturn(true)
 
         val loginUser = authService.signIn(

@@ -33,14 +33,14 @@ class AuthService(
 
     @Transactional
     fun deleteUser(loginId: String): User {
-        return userRepository.findUserByLoginIdAndIsDeletedFalse(loginId)
+        return userRepository.findUserByLoginIdAndIsDeletedFalseAndIsLoginTrue(loginId)
             ?.apply { isDeleted = true }
             ?: throw BadRequestException("회원을 찾을 수 없습니다.")
     }
 
     @Transactional
     fun signIn(signInReq: SignInReq): User {
-        return userRepository.findUserByLoginIdAndIsDeletedFalse(signInReq.loginId)
+        return userRepository.findUserByLoginIdAndIsDeletedFalseAndIsLoginTrue(signInReq.loginId)
             ?.apply {
                 if (!passwordEncoder.matches(signInReq.password, password)) {
                     throw AuthException("계정 정보가 일치하지 않습니다.")
