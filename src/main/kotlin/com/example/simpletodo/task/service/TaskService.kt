@@ -10,7 +10,6 @@ import com.example.simpletodo.task.repository.TaskHistoryRepository
 import com.example.simpletodo.task.repository.TaskRepository
 import com.example.simpletodo.task.state.StateFactory
 import com.example.simpletodo.user.repository.UserRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -93,13 +92,12 @@ class TaskService(
 
     @Transactional
     fun updateTaskStatus(taskId: Long, req: ChangeStatusReq): Task {
-        return taskRepository.findByIdOrNull(taskId)
+        return taskRepository.findByIdAndIsDeletedFalse(taskId)
             ?.apply {
                 val state = stateFactory.create(this)
                 state.changeState(this, req.to, req.memo)
             }
             ?: throw BadRequestException("할일을 찾을 수 없습니다.")
-
     }
 
 }

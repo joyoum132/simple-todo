@@ -10,4 +10,6 @@ interface TaskRepository: JpaRepository<Task, Long> {
 
     fun findByUserAndDueDateBetweenOrderByCreated(user: User, start: LocalDate, end: LocalDate): List<Task>
 
+    fun findByIdAndIsDeletedFalse(id: Long): Task?
+
 }
