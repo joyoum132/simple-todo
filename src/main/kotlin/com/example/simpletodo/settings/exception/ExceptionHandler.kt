@@ -18,7 +18,7 @@ class ExceptionHandler {
                 ApiResponse(
                     isSuccess = false,
                     error = ErrorResponse(e.msg)
-                    )
+                )
             )
     }
 
@@ -36,7 +36,8 @@ class ExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<ApiResponse<Nothing>> {
-        val notValidArgs: Map<String, String> = e.bindingResult.fieldErrors.associate { it.field to it.defaultMessage.toString() }
+        val notValidArgs: Map<String, String> =
+            e.bindingResult.fieldErrors.associate { it.field to it.defaultMessage.toString() }
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(
@@ -48,13 +49,13 @@ class ExceptionHandler {
     }
 
     @ExceptionHandler(Exception::class)
-    fun handleException(e: Exception): ResponseEntity<ApiResponse<Nothing>>{
+    fun handleException(e: Exception): ResponseEntity<ApiResponse<Nothing>> {
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(
                 ApiResponse(
                     isSuccess = false,
-                    error = ErrorResponse(e.message?: "")
+                    error = ErrorResponse(e.message ?: "")
                 )
             )
     }

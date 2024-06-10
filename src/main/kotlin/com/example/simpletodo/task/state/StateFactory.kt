@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component
 class StateFactory(
     private val taskHistoryRepository: TaskHistoryRepository
 ) {
-    fun create(task: Task) : TaskState {
-        return when(task.status) {
+    fun create(task: Task): TaskState {
+        return when (task.status) {
             Task.TaskStatus.TODO -> StateTodo(taskHistoryRepository)
             Task.TaskStatus.PENDING -> StatePending(taskHistoryRepository)
             Task.TaskStatus.IN_PROGRESS -> StateInProgress(taskHistoryRepository)

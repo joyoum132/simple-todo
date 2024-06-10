@@ -8,7 +8,12 @@ interface TaskState {
     fun canChangeTo(to: Task.TaskStatus): Boolean
     fun changeState(task: Task, to: Task.TaskStatus, memo: String?): Task
 
-    fun writeChangeHistory(taskHistoryRepository: TaskHistoryRepository, task: Task, to: Task.TaskStatus, memo: String?) {
+    fun writeChangeHistory(
+        taskHistoryRepository: TaskHistoryRepository,
+        task: Task,
+        to: Task.TaskStatus,
+        memo: String?
+    ) {
         taskHistoryRepository.save(
             TaskHistory(
                 task.id,

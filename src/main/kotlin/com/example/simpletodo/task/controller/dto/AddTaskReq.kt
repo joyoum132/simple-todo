@@ -4,7 +4,7 @@ import com.example.simpletodo.task.domain.Task
 import jakarta.validation.constraints.NotBlank
 import java.time.LocalDate
 
-class AddTaskReq (
+class AddTaskReq(
     @field:NotBlank
     val loginId: String,
 

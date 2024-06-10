@@ -4,7 +4,7 @@ import com.example.simpletodo.task.domain.Task
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-class TaskInfo (
+class TaskInfo(
     val id: Long,
     val title: String,
     val content: String?,

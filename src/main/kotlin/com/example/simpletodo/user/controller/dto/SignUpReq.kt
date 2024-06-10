@@ -2,7 +2,7 @@ package com.example.simpletodo.user.controller.dto
 
 import jakarta.validation.constraints.NotBlank
 
-class SignUpReq (
+class SignUpReq(
     @field:NotBlank
     val loginId: String,
 

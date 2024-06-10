@@ -13,7 +13,7 @@ class StateDone(
     }
 
     override fun changeState(task: Task, to: Task.TaskStatus, memo: String?): Task {
-        if(!canChangeTo(to)) {
+        if (!canChangeTo(to)) {
             throw BadRequestException("상태를 변경할 수 없습니다.")
         }
         writeChangeHistory(taskHistoryRepository, task, to, memo)

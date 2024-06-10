@@ -18,7 +18,7 @@ class AuthService(
 
     fun signUp(signUpReq: SignUpReq): User {
         val isDulpLoginId = userRepository.existsByLoginIdAndIsDeletedFalse(signUpReq.loginId)
-        if(isDulpLoginId) {
+        if (isDulpLoginId) {
             throw BadRequestException("중복된 아이디입니다.")
         }
 
@@ -42,7 +42,7 @@ class AuthService(
     fun signIn(signInReq: SignInReq): User {
         return userRepository.findUserByLoginIdAndIsDeletedFalse(signInReq.loginId)
             ?.apply {
-                if(!passwordEncoder.matches(signInReq.password, password)) {
+                if (!passwordEncoder.matches(signInReq.password, password)) {
                     throw AuthException("계정 정보가 일치하지 않습니다.")
                 }
                 isLogin = true

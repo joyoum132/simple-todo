@@ -42,15 +42,16 @@ class TaskService(
                 return taskRepository.findByUserAndDueDateBetweenOrderByCreated(user, startDate, endDate.plusDays(1))
                     .groupBy(
                         { it.status },
-                        { TaskInfo(
-                            it.id,
-                            it.title,
-                            it.content,
-                            it.dueDate,
-                            it.status,
-                            it.created,
-                            it.updated
-                        )
+                        {
+                            TaskInfo(
+                                it.id,
+                                it.title,
+                                it.content,
+                                it.dueDate,
+                                it.status,
+                                it.created,
+                                it.updated
+                            )
                         }
                     )
             }

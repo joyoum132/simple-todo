@@ -4,7 +4,7 @@ import com.example.simpletodo.settings.commonVal.BaseTime
 import jakarta.persistence.*
 
 @Entity
-class User (
+class User(
     @Column(nullable = false)
     val loginId: String,
 
@@ -13,7 +13,7 @@ class User (
 
     @Column(nullable = false)
     var nickname: String
-): BaseTime() {
+) : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L

@@ -3,21 +3,20 @@ package com.example.simpletodo.task.service
 import com.example.simpletodo.settings.exception.BadRequestException
 import com.example.simpletodo.task.controller.dto.AddTaskReq
 import com.example.simpletodo.task.controller.dto.ChangeStatusReq
-import com.example.simpletodo.task.controller.dto.TaskInfo
 import com.example.simpletodo.task.domain.Task
 import com.example.simpletodo.task.repository.TaskHistoryRepository
 import com.example.simpletodo.task.repository.TaskRepository
 import com.example.simpletodo.task.state.*
 import com.example.simpletodo.user.domain.User
 import com.example.simpletodo.user.repository.UserRepository
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.*
-import org.springframework.data.repository.findByIdOrNull
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import java.time.LocalDate
-import java.util.*
 
 class TaskServiceTest {
     private lateinit var taskService: TaskService
@@ -29,7 +28,7 @@ class TaskServiceTest {
     val loginId = "tester"
     val savedUser = User(loginId, "nickName", "inputPwd")
     val taskId: Long = 0L
-    val todo = Task("title", "content", Task.TaskStatus.TODO, LocalDate.of(2024,6,15), savedUser)
+    val todo = Task("title", "content", Task.TaskStatus.TODO, LocalDate.now(), savedUser)
     val inProgress = Task("title", "content", Task.TaskStatus.IN_PROGRESS, LocalDate.now(), savedUser)
     val pending = Task("title", "content", Task.TaskStatus.PENDING, LocalDate.now(), savedUser)
     val done = Task("title", "content", Task.TaskStatus.DONE, LocalDate.now(), savedUser)
